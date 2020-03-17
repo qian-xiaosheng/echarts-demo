@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>echarts异步加载数据</title>
+</head>
+<body>
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main_line" style="width: 600px;height:400px;"></div>
+<br>
+<div id="main_pie" style="width: 600px;height:400px;"></div>
+<br>
+<div id="main_bar" style="width: 600px;height:400px;"></div>
+</body>
+<script type="text/javascript" src="js/echarts.min.js"></script>
+<script type="text/javascript" src="js/westeros.js"></script>
+<script type="text/javascript" src="js/jquery-3.4.0.js"></script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    //var myChart = echarts.init(document.getElementById('main_line'));//默认主题
+    var myChart = echarts.init(document.getElementById('main_line'),"westeros");//定制主题颜色
+    $.get('echarts_line_data', function (data) {//异步加载图表数据
+        var option = {
+            title: {
+                text: '折线图实例'
+            },
+            tooltip: {},
+            legend: {
+                data:['销量']
+            },
+            xAxis: {
+                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'line',//图表类型为折线
+                data: data.data_line//来自后端的数据
+            }]
+        };
+        myChart.setOption(option);
+    }, 'json');
+
+
+    var myChart2 = echarts.init(document.getElementById('main_pie'));//默认主题
+    //var myChart2 = echarts.init(document.getElementById('main_pie'),"westeros");//定制主题颜色
+    $.get('echarts_pie_data', function (data) {//异步加载图表数据
+        var option = {
+            series: [{
+                name: '销量',
+                type: 'pie',//图表类型为饼图
+                data: data.data_pie//来自后端的数据
+            }]
+        };
+        myChart2.setOption(option);
+    }, 'json');
+
+
+    //var myChart3 = echarts.init(document.getElementById('main_bar'));//默认主题
+    var myChart3 = echarts.init(document.getElementById('main_bar'),"westeros");//定制主题颜色
+    $.get('echarts_bar_data', function (data) {//异步加载图表数据
+        var option = {
+            title: {
+                text: '柱状图实例'
+            },
+            tooltip: {},
+            legend: {
+                data:['销量']
+            },
+            xAxis: {
+                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',//图表类型为柱状
+                data: data.data_bar//来自后端的数据
+            }]
+        };
+        myChart3.setOption(option);
+    }, 'json');
+</script>
+</html>
